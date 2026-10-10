@@ -1,0 +1,93 @@
+_schema-version: "3.2"
+ID: ListRepPage
+version: 0.0.1
+modules:
+- name: ListRepPage-destination-content
+  type: com.sap.application.content
+  requires:
+  - name: ListRepPage-destination-service
+    parameters:
+      content-target: true
+  - name: ListRepPage_html_repo_host
+    parameters:
+      service-key:
+        name: ListRepPage_html_repo_host-key
+  - name: uaa_ListRepPage
+    parameters:
+      service-key:
+        name: uaa_ListRepPage-key
+  parameters:
+    content:
+      instance:
+        destinations:
+        - Name: AListRepPage_ListRepPage_html_repo_host
+          ServiceInstanceName: ListRepPage-html5-app-host-service
+          ServiceKeyName: ListRepPage_html_repo_host-key
+          sap.cloud.service: AListRepPage
+        - Authentication: OAuth2UserTokenExchange
+          Name: AListRepPage_uaa_ListRepPage
+          ServiceInstanceName: ListRepPage-xsuaa-service
+          ServiceKeyName: uaa_ListRepPage-key
+          sap.cloud.service: AListRepPage
+        existing_destinations_policy: ignore
+  build-parameters:
+    no-source: true
+- name: ListRepPage-app-content
+  type: com.sap.application.content
+  path: .
+  requires:
+  - name: ListRepPage_html_repo_host
+    parameters:
+      content-target: true
+  build-parameters:
+    build-result: resources
+    requires:
+    - artifacts:
+      - customerlistreppag.zip
+      name: customerlistreppag
+      target-path: resources/
+- name: customerlistreppag
+  type: html5
+  path: customer.listreppag
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+resources:
+- name: ListRepPage-destination-service
+  type: org.cloudfoundry.managed-service
+  parameters:
+    config:
+      HTML5Runtime_enabled: true
+      init_data:
+        instance:
+          destinations:
+          - Authentication: NoAuthentication
+            Name: ui5
+            ProxyType: Internet
+            Type: HTTP
+            URL: https://ui5.sap.com
+          existing_destinations_policy: update
+      version: 1.0.0
+    service: destination
+    service-name: ListRepPage-destination-service
+    service-plan: lite
+- name: ListRepPage_html_repo_host
+  type: org.cloudfoundry.managed-service
+  parameters:
+    service: html5-apps-repo
+    service-name: ListRepPage-html5-app-host-service
+    service-plan: app-host
+- name: uaa_ListRepPage
+  type: org.cloudfoundry.managed-service
+  parameters:
+    path: ./xs-security.json
+    service: xsuaa
+    service-name: ListRepPage-xsuaa-service
+    service-plan: application
+parameters:
+  deploy_mode: html5-repo
+  enable-parallel-deployments: true

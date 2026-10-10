@@ -1,0 +1,222 @@
+<edmx:Edmx xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx" Version="4.0">
+    <edmx:Reference Uri="https://sap.github.io/odata-vocabularies/vocabularies/Common.xml">
+        <edmx:Include Namespace="com.sap.vocabularies.Common.v1" Alias="Common"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="https://sap.github.io/odata-vocabularies/vocabularies/UI.xml">
+        <edmx:Include Namespace="com.sap.vocabularies.UI.v1" Alias="UI"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="https://sap.github.io/odata-vocabularies/vocabularies/Communication.xml">
+        <edmx:Include Namespace="com.sap.vocabularies.Communication.v1" Alias="Communication"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="https://oasis-tcs.github.io/odata-vocabularies/vocabularies/Org.OData.Capabilities.V1.xml">
+        <edmx:Include Namespace="Org.OData.Capabilities.V1" Alias="Capabilities"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/v2/northwind/northwind.svc/$metadata">
+        <edmx:Include Namespace="NorthwindModel"/>
+        <edmx:Include Namespace="ODataWeb.Northwind.Model"/>
+    </edmx:Reference>
+    <edmx:DataServices>
+        <Schema xmlns="http://docs.oasis-open.org/odata/ns/edm" Namespace="local">
+
+            <!-- ============================================================ -->
+            <!-- Filtros y columnas del List Report                           -->
+            <!-- Las columnas toman su encabezado del Common.Label del campo  -->
+            <!-- ============================================================ -->
+            <Annotations Target="NorthwindModel.Customer">
+                <Annotation Term="UI.SelectionFields">
+                    <Collection>
+                        <PropertyPath>CustomerID</PropertyPath>
+                        <PropertyPath>CompanyName</PropertyPath>
+                        <PropertyPath>ContactName</PropertyPath>
+                        <PropertyPath>Country</PropertyPath>
+                        <PropertyPath>Region</PropertyPath>
+                        <PropertyPath>City</PropertyPath>
+                        <PropertyPath>PostalCode</PropertyPath>
+                    </Collection>
+                </Annotation>
+                <Annotation Term="UI.LineItem">
+                    <Collection>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Value" Path="CustomerID"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Value" Path="CompanyName"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Value" Path="ContactName"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Value" Path="Address"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Value" Path="City"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Value" Path="Country"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Value" Path="Phone"/>
+                        </Record>
+                    </Collection>
+                </Annotation>
+            </Annotations>
+
+            <!-- ============================================================ -->
+            <!-- Campos con ayuda de búsqueda (origen: Customers)             -->
+            <!-- ============================================================ -->
+
+            <!-- Pop-up de búsqueda de clientes -->
+            <Annotations Target="NorthwindModel.Customer/CustomerID">
+                <Annotation Term="Common.Label" String="{@i18n>CustomerID}"/>
+                <Annotation Term="Common.SemanticObject" String="AccountingDocument"/>
+                <Annotation Term="Common.ValueList">
+                    <Record Type="Common.ValueListType">
+                        <PropertyValue Property="Label" String="{@i18n>CustomerID}"/>
+                        <PropertyValue Property="CollectionPath" String="Customers"/>
+                        <PropertyValue Property="SearchSupported" Bool="false"/>
+                        <PropertyValue Property="Parameters">
+                            <Collection>
+                                <Record Type="Common.ValueListParameterInOut">
+                                    <PropertyValue Property="LocalDataProperty" PropertyPath="CustomerID"/>
+                                    <PropertyValue Property="ValueListProperty" String="CustomerID"/>
+                                </Record>
+                                <Record Type="Common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="CompanyName"/>
+                                </Record>
+                                <Record Type="Common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="City"/>
+                                </Record>
+                                <Record Type="Common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="Country"/>
+                                </Record>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+            </Annotations>
+
+            <!-- Pop-up de búsqueda de empresas -->
+            <Annotations Target="NorthwindModel.Customer/CompanyName">
+                <Annotation Term="Common.Label" String="{@i18n>CompanyName}"/>
+                <Annotation Term="Common.ValueList">
+                    <Record Type="Common.ValueListType">
+                        <PropertyValue Property="Label" String="{@i18n>CompanyName}"/>
+                        <PropertyValue Property="CollectionPath" String="Customers"/>
+                        <PropertyValue Property="SearchSupported" Bool="false"/>
+                        <PropertyValue Property="Parameters">
+                            <Collection>
+                                <Record Type="Common.ValueListParameterInOut">
+                                    <PropertyValue Property="LocalDataProperty" PropertyPath="CompanyName"/>
+                                    <PropertyValue Property="ValueListProperty" String="CompanyName"/>
+                                </Record>
+                                <Record Type="Common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="ContactName"/>
+                                </Record>
+                                <Record Type="Common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="City"/>
+                                </Record>
+                                <Record Type="Common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="Country"/>
+                                </Record>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+            </Annotations>
+
+            <!-- Lista desplegable de contactos (valor único, ver restricción abajo) -->
+            <Annotations Target="NorthwindModel.Customer/ContactName">
+                <Annotation Term="Common.Label" String="{@i18n>ContactName}"/>
+                <Annotation Term="Common.ValueListWithFixedValues" Bool="true"/>
+                <Annotation Term="Common.ValueList">
+                    <Record Type="Common.ValueListType">
+                        <PropertyValue Property="Label" String="{@i18n>ContactName}"/>
+                        <PropertyValue Property="CollectionPath" String="Customers"/>
+                        <PropertyValue Property="SearchSupported" Bool="false"/>
+                        <PropertyValue Property="Parameters">
+                            <Collection>
+                                <Record Type="Common.ValueListParameterInOut">
+                                    <PropertyValue Property="LocalDataProperty" PropertyPath="ContactName"/>
+                                    <PropertyValue Property="ValueListProperty" String="ContactName"/>
+                                </Record>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+            </Annotations>
+
+            <!-- ============================================================ -->
+            <!-- Etiquetas del resto de campos                                -->
+            <!-- Una sola vez por campo: aplica a filtros, columnas y pop-ups -->
+            <!-- ============================================================ -->
+            <Annotations Target="NorthwindModel.Customer/Address">
+                <Annotation Term="Common.Label" String="{@i18n>Address}"/>
+            </Annotations>
+            <Annotations Target="NorthwindModel.Customer/City">
+                <Annotation Term="Common.Label" String="{@i18n>City}"/>
+            </Annotations>
+            <Annotations Target="NorthwindModel.Customer/Region">
+                <Annotation Term="Common.Label" String="{@i18n>Region}"/>
+            </Annotations>
+            <Annotations Target="NorthwindModel.Customer/PostalCode">
+                <Annotation Term="Common.Label" String="{@i18n>PostalCode}"/>
+            </Annotations>
+            <Annotations Target="NorthwindModel.Customer/ContactTitle">
+                <Annotation Term="Common.Label" String="{@i18n>ContactTitle}"/>
+            </Annotations>
+            <Annotations Target="NorthwindModel.Customer/Country">
+                <Annotation Term="Common.Label" String="{@i18n>Country}"/>
+            </Annotations>
+            <Annotations Target="NorthwindModel.Customer/Phone">
+                <Annotation Term="Common.Label" String="{@i18n>Phone}"/>
+                <Annotation Term="UI.HiddenFilter" Bool="true"/>
+            </Annotations>
+
+            <!-- ============================================================ -->
+            <!-- Campos que no tiene sentido usar como filtro                 -->
+            <!-- Se ocultan en la barra principal y dentro de los pop-ups     -->
+            <!-- ============================================================ -->
+            <Annotations Target="NorthwindModel.Customer/ContactTitle">
+                <Annotation Term="UI.HiddenFilter" Bool="true"/>
+            </Annotations>
+            <Annotations Target="NorthwindModel.Customer/Fax">
+                <Annotation Term="UI.HiddenFilter" Bool="true"/>
+            </Annotations>
+
+            <!-- ============================================================ -->
+            <!-- Restricciones del entity set Customers                       -->
+            <!-- Sin búsqueda libre, sin crear/borrar, ContactName valor único -->
+            <!-- ============================================================ -->
+            <Annotations Target="ODataWeb.Northwind.Model.NorthwindEntities/Customers">
+                <Annotation Term="Capabilities.SearchRestrictions">
+                    <Record Type="Capabilities.SearchRestrictionsType">
+                        <PropertyValue Property="Searchable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="Capabilities.InsertRestrictions">
+                    <Record Type="Capabilities.InsertRestrictionsType">
+                        <PropertyValue Property="Insertable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="Capabilities.DeleteRestrictions">
+                    <Record Type="Capabilities.DeleteRestrictionsType">
+                        <PropertyValue Property="Deletable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="Capabilities.FilterRestrictions">
+                    <Record Type="Capabilities.FilterRestrictionsType">
+                        <PropertyValue Property="FilterExpressionRestrictions">
+                            <Collection>
+                                <Record Type="Capabilities.FilterExpressionRestrictionType">
+                                    <PropertyValue Property="Property" PropertyPath="ContactName"/>
+                                    <PropertyValue Property="AllowedExpressions" String="SingleValue"/>
+                                </Record>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+            </Annotations>
+
+        </Schema>
+    </edmx:DataServices>
+</edmx:Edmx>
